@@ -1,29 +1,39 @@
 program passdata
 
-  use, intrinsic :: iso_c_binding, only: c_double, c_loc, c_f_pointer, c_ptr
+  use, intrinsic :: iso_c_binding, only: c_double
+
   use RInside_interface
+
   implicit none
 
   type(SEXP) :: res
   type(SEXP), target :: vec
   real(c_double), pointer :: fvec(:) => null()
 
-  call c_setupRinC()
-  res = c_evalQuietlyInR("y <- 3"//c_null_char)
-  res = c_evalQuietlyInR("z <- 2.5"//c_null_char)
-  res = c_evalQuietlyInR("print(y*z)"//c_null_char)
-  res = c_evalQuietlyInR("y <- rnorm(10)"//c_null_char)
-  res = c_evalQuietlyInR("print(y)"//c_null_char)
+  call setupRinC()
 
-  vec = c_Rf_protect(c_evalInR("y"//c_null_char))
+  res = evalQuietlyInR("y <- 3")
+  res = evalQuietlyInR("z <- 2.5")
+  res = evalQuietlyInR("print(y*z)")
+  res = evalQuietlyInR("y <- rnorm(10)")
+  res = evalQuietlyInR("print(y)")
 
-  call c_Rf_PrintValue(vec)
+  ! The protect is added to prevent R from doing garbage collection
+  vec = Rf_protect(evalInR("y"))
 
-  call c_f_pointer(SEXP2REAL(vec),fvec,[10])
+  call Rf_PrintValue(vec)
+
+  ! fvec is a pointer to the underlying SEXP memory
+  fvec => double_from_SEXP(vec,10)
   print *, fvec
 
-  call c_Rf_unprotect(1)
+  ! modifying fvec, changes the value in vec
+  fvec(4) = 42
+  call Rf_PrintValue(vec)
 
-  call c_teardownRinC()
+  ! We need to unprotect before teardown
+  call Rf_unprotect(1)
+
+  call teardownRinC()
 
 end program
