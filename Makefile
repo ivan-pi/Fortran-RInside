@@ -31,6 +31,10 @@ passdata: Rfortran_helpers.o
 	$(FC) passdata.f90 RInside_interface.f90 Rfortran_helpers.o $(FLAGS) -o passdata
 	./passdata
 
+xcall_r: Rfortran_helpers.o
+	$(FC) xcall_r.f90 RInside_interface.f90 Rfortran_helpers.o $(FLAGS) -o xcall_r
+	./xcall_r
+
 .phony.: clean
 
 clean:
