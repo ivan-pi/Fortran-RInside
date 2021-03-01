@@ -14,4 +14,7 @@ A Makefile is provided to build the examples. The Makefile is not very elegant a
 
 The RInside package is described in the book chapter:
 
-> Eddelbuettel D. (2013) RInside. In: Seamless R and C++ Integration with Rcpp. Use R!, vol 64. Springer, New York, NY. https://doi.org/10.1007/978-1-4614-6868-4_9 [(download PDF)](https://link.springer.com/content/pdf/10.1007%2F978-1-4614-6868-4.pdf)
+> Eddelbuettel D. (2013) RInside. In: Seamless R and C++ Integration with Rcpp. Use R!, vol 64. Springer, New York, NY. https://doi.org/10.1007/978-1-4614-6868-4_9
+
+A full-text PDF of the book can be downloaded from SpringerLink by clicking [here](https://link.springer.com/content/pdf/10.1007%2F978-1-4614-6868-4.pdf)).
+
