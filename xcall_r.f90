@@ -3,36 +3,32 @@ program xcall_r
 use RInside_interface
 implicit none
 integer :: iter
-integer, parameter :: n = 100000, bin_unit = 20, niter = 3
-real(kind=kind(1.0d0)) :: x(n)
+integer, parameter :: n = 100000000, bin_unit = 20, niter = 3
 character (len=*), parameter :: bin_file = "double.bin"
 logical, parameter :: call_r = .true.
 
+type(SEXP), target :: x_R
+real(kind=kind(1.0d0)), pointer :: x_ptr(:) => null()
+integer, parameter :: REALSXP = 14
+type(SEXP) :: dummy
+
 call setupRinC()
 
+x_R = Rf_protect(Rf_allocVector(REALSXP,n))
+x_ptr => double_from_SEXP(x_R,n)
+
 do iter = 1, niter
-  call random_number(x)
-  write (*,"(a,f11.7)") "mean = ",sum(x)/n
-  if (call_r) then
-    open (unit=bin_unit,file=bin_file,action="write",access="stream",form="unformatted",status="replace")
-    write (bin_unit) x
-    close (bin_unit)
-    call xread_bin()
-  end if
+  call random_number(x_ptr)
+
+  write (*,"(a,f11.7)") "mean = ",sum(x_ptr)/n
+
+  call passToR(x_R,'x')
+  dummy = evalInR('cat("from R: ",mean(x),"\n\n")')
+
 end do
 
+call Rf_unprotect(1)
+
 call teardownRinC()
-
-contains
-
-  subroutine xread_bin()
-    type(SEXP) :: res
-    type(SEXP) :: inp, x
-    res = evalInR('inp = file("double.bin","rb")')
-
-    res = evalInR('x = readBin(inp, "double",n=100000)') ! n is max number of values to read -- can read fewer
-    res = evalInR('cat("from R: ",mean(x),"\n\n")')
-    res = evalInR('close(inp)')
-  end subroutine
 
 end program xcall_r

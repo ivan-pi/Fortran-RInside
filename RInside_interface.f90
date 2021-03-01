@@ -2,6 +2,7 @@ module RInside_interface
 
   use, intrinsic :: iso_c_binding, only: &
     SEXP => c_ptr, &
+    c_int, &
     c_char, &
     c_null_char, &
     c_double, &
@@ -21,6 +22,7 @@ module RInside_interface
   ! Functions from Rinternals.h
   public :: Rf_PrintValue
   public :: Rf_protect, Rf_unprotect
+  public :: Rf_allocVector
 
   public :: double_from_SEXP
 
@@ -48,7 +50,6 @@ module RInside_interface
     subroutine teardownRinC() bind(C,name="teardownRinC")
     end subroutine
 
-
     subroutine Rf_PrintValue(x) bind(C,name="Rf_PrintValue")
       import SEXP
       type(SEXP), intent(in), value :: x
@@ -70,6 +71,12 @@ module RInside_interface
       use, intrinsic :: iso_c_binding, only: c_int
       integer(c_int), intent(in), value :: n
     end subroutine
+
+    type(SEXP) function Rf_allocVector(type,n) bind(C,name="Rf_allocVector")
+      import SEXP, c_int
+      integer(c_int), intent(in), value :: type
+      integer(c_int), intent(in), value :: n
+    end function
 
   end interface
 
