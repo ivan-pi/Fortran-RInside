@@ -8,9 +8,9 @@ To install RInside, open an R console and run the command:
 install.packages("RInside")
 ```
 
-The two example programs `hello` and `passdata` replicate the examples from the [`rinside/inst/examples/c_interface/`](https://github.com/eddelbuettel/rinside/tree/master/inst/examples/c_interface) folder.
+The programs `hello` and `passdata` are replicates of the original example programs in the [`rinside/inst/examples/c_interface/`](https://github.com/eddelbuettel/rinside/tree/master/inst/examples/c_interface) folder.
 
-A Makefile is provided to build the example. The Makefile requires some more work.
+A Makefile is provided to build the examples. The Makefile is not very elegant and would require more attention.
 
 The RInside package is described in the book chapter:
 
