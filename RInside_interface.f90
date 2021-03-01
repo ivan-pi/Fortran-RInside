@@ -23,6 +23,7 @@ module RInside_interface
   public :: Rf_PrintValue
   public :: Rf_protect, Rf_unprotect
   public :: Rf_allocVector
+  public :: Rf_asReal
 
   public :: double_from_SEXP
 
@@ -76,6 +77,11 @@ module RInside_interface
       import SEXP, c_int
       integer(c_int), intent(in), value :: type
       integer(c_int), intent(in), value :: n
+    end function
+
+    real(c_double) function Rf_asReal(x) bind(C,name="Rf_asReal")
+      import SEXP, c_double
+      type(SEXP), intent(in), value :: x
     end function
 
   end interface

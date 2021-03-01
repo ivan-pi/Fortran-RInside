@@ -10,7 +10,7 @@ logical, parameter :: call_r = .true.
 type(SEXP), target :: x_R
 real(kind=kind(1.0d0)), pointer :: x_ptr(:) => null()
 integer, parameter :: REALSXP = 14
-type(SEXP) :: dummy
+type(SEXP) :: dummy, res
 
 call setupRinC()
 
@@ -23,8 +23,9 @@ do iter = 1, niter
   write (*,"(a,f11.7)") "mean = ",sum(x_ptr)/n
 
   call passToR(x_R,'x')
-  dummy = evalInR('cat("from R: ",mean(x),"\n\n")')
+  res = evalInR("mean(x)")
 
+  write(*,"(a,f11.7)") "from R: ", Rf_asReal(res)
 end do
 
 call Rf_unprotect(1)

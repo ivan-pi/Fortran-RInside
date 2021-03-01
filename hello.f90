@@ -5,11 +5,11 @@ program hello
 
   type(SEXP) :: res
 
-  call c_setupRinC()
+  call setupRinC()
 
-  res = c_evalQuietlyInR("print('Hello, World')"//c_null_char)
+  res = evalQuietlyInR("print('Hello, World')"//c_null_char)
   ! the result res is a c_null_ptr
 
-  call c_teardownRinC()
+  call teardownRinC()
 
 end program
